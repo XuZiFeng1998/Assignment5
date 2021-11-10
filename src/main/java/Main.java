@@ -27,8 +27,29 @@ public class Main {
             long startTime = System.currentTimeMillis();
             for (int t = 0; t < 10; t++) {
                 for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
-                ParSort.sort(array, 0, array.length);
+                ParSort.sort(array, 0, array.length/4);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ParSort.sort(array, array.length/4, array.length/2);
+                    }
+                }).start();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ParSort.sort(array, array.length/2, array.length*3/4);
+                    }
+                }).start();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ParSort.sort(array, array.length*3/4, array.length);
+                    }
+                }).start();
             }
+
             long endTime = System.currentTimeMillis();
             time = (endTime - startTime);
             timeList.add(time);
